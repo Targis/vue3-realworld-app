@@ -8,7 +8,11 @@
             <h4>{{ userProfile.username }}</h4>
             <p>{{ userProfile.bio }}</p>
             <div>
-              FOLLOW USER BUTTON
+              <mv-follow-user
+                v-if="!isCurrentUserProfile"
+                :is-following="userProfile.following"
+                :username="userProfile.username"
+              />
               <router-link
                 v-if="isCurrentUserProfile"
                 class="btn btn-sm btn-outline-secondary action-btn"
@@ -54,7 +58,6 @@
             </ul>
           </div>
           <mv-feed :api-url="apiUrl" />
-          {{ apiUrl }}
         </div>
       </div>
     </div>
@@ -66,10 +69,12 @@ import {mapState, mapGetters} from 'vuex'
 import {actionTypes} from '@/store/modules/userProfile'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import MvFeed from '@/components/Feed'
+import MvFollowUser from '@/components/FollowUser'
 export default {
   name: 'MvUserProfile',
   components: {
-    MvFeed
+    MvFeed,
+    MvFollowUser
   },
   computed: {
     ...mapState({
@@ -99,6 +104,9 @@ export default {
     },
     routeName() {
       return this.$route.name
+    },
+    isFollowing() {
+      return this.userProfile.isFollowing
     }
   },
   watch: {

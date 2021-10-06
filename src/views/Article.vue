@@ -43,6 +43,19 @@
               Delete Article
             </button>
           </span>
+          <span v-if="!isAuthor">
+            <mv-follow-user
+              :is-following="article.author.following"
+              :username="article.author.username"
+            />
+            &nbsp;
+            <mv-add-to-favorites
+              :btn-style-big="true"
+              :is-favorited="article.favorited"
+              :article-slug="article.slug"
+              :favorites-count="article.favoritesCount"
+            />
+          </span>
         </div>
       </div>
     </div>
@@ -57,6 +70,7 @@
           <mv-tag-list :tags="article.tagList" />
         </div>
       </div>
+      <hr />
     </div>
   </div>
 </template>
@@ -68,12 +82,16 @@ import {mapState, mapGetters} from 'vuex'
 import MvLoading from '@/components/Loading'
 import MvErrorMessage from '@/components/ErrorMessage'
 import MvTagList from '@/components/TagList'
+import MvFollowUser from '@/components/FollowUser'
+import MvAddToFavorites from '@/components/AddToFavorites'
 export default {
   name: 'MvArticle',
   components: {
     MvLoading,
     MvErrorMessage,
-    MvTagList
+    MvTagList,
+    MvFollowUser,
+    MvAddToFavorites
   },
   computed: {
     ...mapState({

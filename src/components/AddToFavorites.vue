@@ -9,7 +9,13 @@
   >
     <i class="ion-heart"></i>
     &nbsp;
-    {{ favoritesCountOptimistic }}
+    <template v-if="btnStyleBig">
+      {{ isFavoritedOptimistic ? 'Unfollow Article' : 'Follow Article' }}
+      &nbsp; ({{ favoritesCountOptimistic }})
+    </template>
+    <template v-else>
+      {{ favoritesCountOptimistic }}
+    </template>
   </button>
 </template>
 
@@ -29,6 +35,10 @@ export default {
     favoritesCount: {
       type: Number,
       required: true
+    },
+    btnStyleBig: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
