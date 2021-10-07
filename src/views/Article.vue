@@ -24,7 +24,7 @@
             >
               {{ article.author.username }}
             </router-link>
-            <span class="date">{{ article.createdAt }}</span>
+            <span class="date">{{ articleCreatedAt }}</span>
           </div>
           <span v-if="isAuthor">
             <router-link
@@ -84,6 +84,7 @@ import MvErrorMessage from '@/components/ErrorMessage'
 import MvTagList from '@/components/TagList'
 import MvFollowUser from '@/components/FollowUser'
 import MvAddToFavorites from '@/components/AddToFavorites'
+import {formatDate} from '@/helpers/utils'
 export default {
   name: 'MvArticle',
   components: {
@@ -107,6 +108,9 @@ export default {
         return false
       }
       return this.currentUser.username === this.article.author.username
+    },
+    articleCreatedAt() {
+      return formatDate(this.article.createdAt)
     }
   },
   mounted() {
