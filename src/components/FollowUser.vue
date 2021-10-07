@@ -12,7 +12,9 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import {actionTypes} from '@/store/modules/followUser'
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 export default {
   name: 'MvFollowUser',
   props: {
@@ -30,8 +32,17 @@ export default {
       isFollowingOptimistic: this.isFollowing
     }
   },
+  computed: {
+    ...mapGetters({
+      isAnonymous: authGetterTypes.isAnonymous
+    })
+  },
   methods: {
     handleFollow() {
+      if (this.isAnonymous) {
+        this.$router.push({name: 'login'})
+        return false
+      }
       this.$store.dispatch(actionTypes.followUser, {
         username: this.username,
         isFollowing: this.isFollowingOptimistic

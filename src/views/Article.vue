@@ -84,6 +84,7 @@ import MvErrorMessage from '@/components/ErrorMessage'
 import MvTagList from '@/components/TagList'
 import MvFollowUser from '@/components/FollowUser'
 import MvAddToFavorites from '@/components/AddToFavorites'
+import {formatDate} from '@/helpers/utils'
 export default {
   name: 'MvArticle',
   components: {

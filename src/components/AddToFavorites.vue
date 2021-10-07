@@ -21,6 +21,8 @@
 
 <script>
 import {actionTypes} from '@/store/modules/addToFavorites'
+import {mapGetters} from 'vuex'
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 export default {
   name: 'MvAddToFavorites',
   props: {
@@ -47,9 +49,18 @@ export default {
       favoritesCountOptimistic: this.favoritesCount
     }
   },
+  computed: {
+    ...mapGetters({
+      isAnonymous: authGetterTypes.isAnonymous
+    })
+  },
   methods: {
     handleLike() {
-      console.log(this.articleSlug)
+      if (this.isAnonymous) {
+        this.$router.push({name: 'login'})
+        return false
+      }
+
       this.$store.dispatch(actionTypes.addToFavorites, {
         slug: this.articleSlug,
         isFavorited: this.isFavoritedOptimistic
