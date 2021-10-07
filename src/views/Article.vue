@@ -24,7 +24,7 @@
             >
               {{ article.author.username }}
             </router-link>
-            <span class="date">{{ article.createdAt }}</span>
+            <span class="date">{{ articleCreatedAt }}</span>
           </div>
           <span v-if="isAuthor">
             <router-link
@@ -108,6 +108,9 @@ export default {
         return false
       }
       return this.currentUser.username === this.article.author.username
+    },
+    articleCreatedAt() {
+      return formatDate(this.article.createdAt)
     }
   },
   mounted() {
