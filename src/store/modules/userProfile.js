@@ -16,6 +16,16 @@ export const actionTypes = {
   getUserProfile: '[userProfile] Get user profile'
 }
 
+export const getterTypes = {
+  profile: '[userProfile] profile'
+}
+
+export const getters = {
+  [getterTypes.profile]: state => {
+    return state.data
+  }
+}
+
 const mutations = {
   [mutationTypes.getUserProfileStart](state) {
     state.isLoading = true
@@ -50,5 +60,6 @@ const actions = {
 export default {
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

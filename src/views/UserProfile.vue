@@ -8,7 +8,7 @@
             <h4>{{ userProfile.username }}</h4>
             <p>{{ userProfile.bio }}</p>
             <div>
-              <mv-follow-user
+              <mv-follow
                 v-if="!isCurrentUserProfile"
                 :is-following="userProfile.following"
                 :username="userProfile.username"
@@ -69,12 +69,12 @@ import {mapState, mapGetters} from 'vuex'
 import {actionTypes} from '@/store/modules/userProfile'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import MvFeed from '@/components/Feed'
-import MvFollowUser from '@/components/FollowUser'
+import MvFollow from '@/components/Follow'
 export default {
   name: 'MvUserProfile',
   components: {
     MvFeed,
-    MvFollowUser
+    MvFollow
   },
   computed: {
     ...mapState({

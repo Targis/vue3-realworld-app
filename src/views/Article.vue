@@ -3,7 +3,11 @@
     <div class="banner">
       <div class="container" v-if="article">
         <h1>{{ article.title }}</h1>
-        <mv-article-meta :article="article" :isAuthor="isAuthor" />
+        <mv-article-meta
+          :article="article"
+          :is-author="isAuthor"
+          :is-following="article.author.following"
+        />
       </div>
     </div>
     <div class="container page">
@@ -18,8 +22,17 @@
         </div>
       </div>
       <hr />
-      <div class="article-actions">
-        <mv-article-meta :article="article" :isAuthor="isAuthor" />
+      <div class="article-actions" v-if="article">
+        <mv-article-meta
+          :article="article"
+          :isAuthor="isAuthor"
+          :is-following="article.author.following"
+        />
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-8 offset-md-2">
+          <mv-comments />
+        </div>
       </div>
     </div>
   </div>
@@ -33,13 +46,15 @@ import MvLoading from '@/components/Loading'
 import MvErrorMessage from '@/components/ErrorMessage'
 import MvTagList from '@/components/TagList'
 import MvArticleMeta from '@/components/ArticleMeta'
+import MvComments from '@/components/Comments'
 export default {
   name: 'MvArticle',
   components: {
     MvLoading,
     MvErrorMessage,
     MvTagList,
-    MvArticleMeta
+    MvArticleMeta,
+    MvComments
   },
   computed: {
     ...mapState({
@@ -58,7 +73,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route)
     this.$store.dispatch(articleActionTypes.getArticle, {
       slug: this.$route.params.slug
     })

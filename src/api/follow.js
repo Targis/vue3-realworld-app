@@ -12,7 +12,14 @@ const unfollowUser = slug => {
     .then(response => response.data.profile)
 }
 
+const getFollow = username => {
+  return axios
+    .get(`/profiles/${username}`)
+    .then(response => response.data.profile)
+}
+
 export default {
   followUser,
-  unfollowUser
+  unfollowUser,
+  getFollow
 }

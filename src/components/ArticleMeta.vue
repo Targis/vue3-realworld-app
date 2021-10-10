@@ -37,9 +37,9 @@
       </button>
     </span>
     <span v-if="!isAuthor">
-      <mv-follow-user
-        :is-following="article.author.following"
+      <mv-follow
         :username="article.author.username"
+        :is-following="isFollowing"
       />
       &nbsp;
       <mv-add-to-favorites
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import MvFollowUser from '@/components/FollowUser'
+import MvFollow from '@/components/Follow'
 import MvAddToFavorites from '@/components/AddToFavorites'
 export default {
   name: 'MvArticleMeta',
@@ -65,10 +65,14 @@ export default {
     isAuthor: {
       type: Boolean,
       required: true
+    },
+    isFollowing: {
+      type: Boolean,
+      required: true
     }
   },
   components: {
-    MvFollowUser,
+    MvFollow,
     MvAddToFavorites
   }
 }

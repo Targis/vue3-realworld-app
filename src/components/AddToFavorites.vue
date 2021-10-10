@@ -1,5 +1,6 @@
 <template>
   <button
+    v-if="articleSlug"
     @click="handleLike"
     class="btn btn-sm"
     :class="{
