@@ -8,13 +8,12 @@
     &nbsp;
     {{ isFollowingOptimistic ? 'Unfollow' : 'Follow' }}
     {{ username }}
-    <!-- <span v-text="followUserLabel" /> -->
   </button>
 </template>
 
 <script>
 import {mapState, mapGetters} from 'vuex'
-import {actionTypes} from '@/store/modules/follow'
+import {actionTypes, mutationTypes} from '@/store/modules/follow'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 export default {
   name: 'MvFollow',
@@ -30,8 +29,6 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading: state => state.follow.isLoading,
-      error: state => state.follow.error,
       isFollowingOptimistic: state => state.follow.isFollowingOptimistic
     }),
     ...mapGetters({
@@ -48,11 +45,11 @@ export default {
         username: this.username,
         isFollowing: this.isFollowingOptimistic
       })
-      this.$store.dispatch(actionTypes.toggleFollow, this.isFollowingOptimistic)
+      this.$store.commit(mutationTypes.toggleFollow, this.isFollowingOptimistic)
     }
   },
   mounted() {
-    this.$store.dispatch(actionTypes.setFollow, this.isFollowing)
+    this.$store.commit(mutationTypes.setFollow, this.isFollowing)
   }
 }
 </script>

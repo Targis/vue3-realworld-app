@@ -1,9 +1,17 @@
 import addToFavoritesApi from '@/api/addToFavorites'
 
+const state = {
+  favoritesCountOptimistic: null,
+  isFavoritedOptimistic: null
+}
+
 export const mutationTypes = {
   addToFavoritesStart: '[addToFavorites] Add to favorites start',
   addToFavoritesSuccess: '[addToFavorites] Add to favorites success',
-  addToFavoritesFailure: '[addToFavorites] Add to favorites failure'
+  addToFavoritesFailure: '[addToFavorites] Add to favorites failure',
+
+  setFavorites: '[addToFavorites] Set favorites',
+  toggleFavorite: '[addToFavorites] Toggle favorite'
 }
 
 export const actionTypes = {
@@ -13,7 +21,20 @@ export const actionTypes = {
 const mutations = {
   [mutationTypes.addToFavoritesStart]() {},
   [mutationTypes.addToFavoritesSuccess]() {},
-  [mutationTypes.addToFavoritesFailure]() {}
+  [mutationTypes.addToFavoritesFailure]() {},
+
+  [mutationTypes.setFavorites](state, {favoritesCount, isFavorited}) {
+    state.favoritesCountOptimistic = favoritesCount
+    state.isFavoritedOptimistic = isFavorited
+  },
+  [mutationTypes.toggleFavorite](state) {
+    if (state.isFavoritedOptimistic) {
+      state.favoritesCountOptimistic--
+    } else {
+      state.favoritesCountOptimistic++
+    }
+    state.isFavoritedOptimistic = !state.isFavoritedOptimistic
+  }
 }
 
 const actions = {
@@ -36,6 +57,7 @@ const actions = {
 }
 
 export default {
+  state,
   actions,
   mutations
 }

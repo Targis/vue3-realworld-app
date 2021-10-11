@@ -42,21 +42,35 @@
         :is-following="isFollowing"
       />
       &nbsp;
-      <mv-add-to-favorites
-        :btn-style-big="true"
-        :is-favorited="article.favorited"
-        :article-slug="article.slug"
-        :favorites-count="article.favoritesCount"
-      />
+
+      <button
+        @click="handleLike"
+        class="btn btn-sm"
+        :class="{
+          'btn-primary': isFavoritedOptimistic,
+          'btn-outline-primary': !isFavoritedOptimistic
+        }"
+      >
+        <i class="ion-heart"></i>
+        &nbsp;
+        {{ isFavoritedOptimistic ? 'Unfavorite Article' : 'Favorite Article' }}
+        &nbsp; ({{ favoritesCountOptimistic }})
+      </button>
     </span>
   </div>
 </template>
 
 <script>
+import {actionTypes, mutationTypes} from '@/store/modules/addToFavorites'
+import {mapState, mapGetters} from 'vuex'
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import MvFollow from '@/components/Follow'
-import MvAddToFavorites from '@/components/AddToFavorites'
+
 export default {
   name: 'MvArticleMeta',
+  components: {
+    MvFollow
+  },
   props: {
     article: {
       type: Object,
@@ -71,9 +85,35 @@ export default {
       required: true
     }
   },
-  components: {
-    MvFollow,
-    MvAddToFavorites
+  computed: {
+    ...mapState({
+      isFavoritedOptimistic: state =>
+        state.addToFavorites.isFavoritedOptimistic,
+      favoritesCountOptimistic: state =>
+        state.addToFavorites.favoritesCountOptimistic
+    }),
+    ...mapGetters({
+      isAnonymous: authGetterTypes.isAnonymous
+    })
+  },
+  methods: {
+    handleLike() {
+      if (this.isAnonymous) {
+        this.$router.push({name: 'login'})
+        return false
+      }
+      this.$store.dispatch(actionTypes.addToFavorites, {
+        slug: this.article.slug,
+        isFavorited: this.isFavoritedOptimistic
+      })
+      this.$store.commit(mutationTypes.toggleFavorite)
+    }
+  },
+  mounted() {
+    this.$store.commit(mutationTypes.setFavorites, {
+      favoritesCount: this.article.favoritesCount,
+      isFavorited: this.article.favorited
+    })
   }
 }
 </script>

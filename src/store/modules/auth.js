@@ -137,7 +137,6 @@ const actions = {
       authApi
         .login(credentials)
         .then(response => {
-          console.log('response', response)
           context.commit(mutationTypes.loginSuccess, response.data.user)
           setItem('accessToken', response.data.user.token)
           resolve(response.data.user)

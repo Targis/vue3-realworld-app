@@ -18,23 +18,13 @@ export const mutationTypes = {
 }
 
 export const actionTypes = {
-  followUser: '[follow] Follow user',
-  setFollow: '[follow] Set follow',
-  toggleFollow: '[follow] Toggle follow'
+  followUser: '[follow] Follow user'
 }
 
 const mutations = {
-  [mutationTypes.followUserStart](state) {
-    state.isLoading = true
-    state.profile = null
-  },
-  [mutationTypes.followUserSuccess](state, payload) {
-    state.isLoading = false
-    state.profile = payload
-  },
-  [mutationTypes.followUserFailure](state) {
-    state.isLoading = false
-  },
+  [mutationTypes.followUserStart]() {},
+  [mutationTypes.followUserSuccess]() {},
+  [mutationTypes.followUserFailure]() {},
 
   [mutationTypes.setFollow](state, isFollowing) {
     state.isFollowingOptimistic = isFollowing
@@ -61,14 +51,6 @@ const actions = {
           context.commit(mutationTypes.followUserFailure)
         })
     })
-  },
-
-  [actionTypes.setFollow](context, isFollowing) {
-    context.commit(mutationTypes.setFollow, isFollowing)
-  },
-
-  [actionTypes.toggleFollow](context, isFollowing) {
-    context.commit(mutationTypes.toggleFollow, isFollowing)
   }
 }
 
