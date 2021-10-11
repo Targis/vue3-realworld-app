@@ -6,6 +6,13 @@ const getComments = slug => {
     .then(response => response.data.comments)
 }
 
+const addComment = ({slug, commentText}) => {
+  return axios
+    .post(`/articles/${slug}/comments`, {comment: {body: commentText}})
+    .then(response => response.data)
+}
+
 export default {
-  getComments
+  getComments,
+  addComment
 }
