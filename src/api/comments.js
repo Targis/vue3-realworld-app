@@ -12,7 +12,12 @@ const addComment = ({slug, commentText}) => {
     .then(response => response.data)
 }
 
+const deleteComment = ({slug, id}) => {
+  return axios.delete(`/articles/${slug}/comments/${id}`)
+}
+
 export default {
   getComments,
-  addComment
+  addComment,
+  deleteComment
 }

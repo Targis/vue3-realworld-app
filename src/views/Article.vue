@@ -1,7 +1,7 @@
 <template>
-  <div class="article-page">
+  <div class="article-page" v-if="article">
     <div class="banner">
-      <div class="container" v-if="article">
+      <div class="container">
         <h1>{{ article.title }}</h1>
         <mv-article-meta
           :article="article"

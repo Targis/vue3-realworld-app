@@ -1,6 +1,12 @@
 <template>
   <div>
-    ERRORS
+    <p if="isAnonymous">
+      <router-link :to="{name: 'login'}">Sign in</router-link>
+
+      or
+      <router-link :to="{name: 'register'}">Sign up</router-link>
+      to add comments on this article.
+    </p>
     <form
       @submit.prevent="postComment"
       class="card comment-form"
@@ -48,10 +54,15 @@
               {{ comment.author.username }}
             </router-link>
             <span class="date-posted">
-              {{ comment.createdAt }}
+              {{ formatDate(comment.createdAt) }}
             </span>
-            <span class="mod-options">
-              <i class="ion-trash-a" @click="deleteComment"></i>
+            <span
+              class="mod-options"
+              v-if="
+                currentUser && comment.author.username === currentUser.username
+              "
+            >
+              <i class="ion-trash-a" @click="deleteComment(comment.id)"></i>
             </span>
           </div>
         </div>
@@ -64,6 +75,7 @@
 import {mapState, mapGetters} from 'vuex'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import {actionTypes} from '@/store/modules/comments'
+import {formatDate} from '@/helpers/utils'
 export default {
   name: 'MvComments',
   data() {
@@ -78,7 +90,8 @@ export default {
       comments: state => state.comments.data
     }),
     ...mapGetters({
-      currentUser: authGetterTypes.currentUser
+      currentUser: authGetterTypes.currentUser,
+      isAnonymous: authGetterTypes.isAnonymous
     })
   },
   mounted() {
@@ -95,8 +108,17 @@ export default {
         })
         .then((this.commentText = ''))
     },
-    deleteComment() {
-      console.log('delete comment')
+    deleteComment(id) {
+      if (!id) {
+        return false
+      }
+      this.$store.dispatch(actionTypes.deleteComment, {
+        slug: this.$route.params.slug,
+        id
+      })
+    },
+    formatDate(dateString) {
+      return formatDate(dateString)
     }
   }
 }

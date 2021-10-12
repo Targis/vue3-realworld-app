@@ -13,12 +13,17 @@ export const mutationTypes = {
 
   addCommentStart: '[comments] Add comment start',
   addCommentSuccess: '[comments] Add comment success',
-  addCommentFailure: '[comments] Add comment failure'
+  addCommentFailure: '[comments] Add comment failure',
+
+  deleteCommentStart: '[comments] Delete comment start',
+  deleteCommentSuccess: '[comments] Delete comment success',
+  deleteCommentFailure: '[comments] Delete comment failure'
 }
 
 export const actionTypes = {
   getComments: '[comments] getComments',
-  addComment: '[comments] addComment'
+  addComment: '[comments] addComment',
+  deleteComment: '[comments] deleteComment'
 }
 
 const mutations = {
@@ -45,7 +50,15 @@ const mutations = {
   [mutationTypes.addCommentFailure](state, payload) {
     state.isLoading = false
     state.error = payload
-  }
+  },
+
+  [mutationTypes.deleteCommentStart]() {},
+  [mutationTypes.deleteCommentSuccess](state, {id}) {
+    console.log(id)
+    const index = state.data.map(e => e.id).indexOf(id)
+    state.data.splice(index, 1)
+  },
+  [mutationTypes.deleteCommentFailure]() {}
 }
 
 const actions = {
@@ -74,6 +87,21 @@ const actions = {
         })
         .catch(errors => {
           context.commit(mutationTypes.addCommentFailure, errors)
+        })
+    })
+  },
+
+  [actionTypes.deleteComment](context, {slug, id}) {
+    return new Promise(resolve => {
+      context.commit(mutationTypes.deleteCommentStart)
+      commentsApi
+        .deleteComment({slug, id})
+        .then(() => {
+          context.commit(mutationTypes.deleteCommentSuccess, {id})
+          resolve()
+        })
+        .catch(() => {
+          context.commit(mutationTypes.deleteCommentFailure)
         })
     })
   }
