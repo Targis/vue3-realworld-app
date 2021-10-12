@@ -1,4 +1,5 @@
 import articleApi from '@/api/article'
+import {formatDate} from '@/helpers/utils'
 
 const state = {
   data: null,
@@ -45,6 +46,8 @@ const actions = {
       articleApi
         .getArticle(slug)
         .then(article => {
+          article.createdAt = formatDate(article.createdAt)
+          article.updatedAt = formatDate(article.updatedAt)
           context.commit(mutationTypes.getArticleSuccess, article)
           resolve(article)
         })

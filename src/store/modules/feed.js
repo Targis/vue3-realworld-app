@@ -1,4 +1,5 @@
 import feedApi from '@/api/feed'
+import {formatDate} from '@/helpers/utils'
 
 const state = {
   data: null,
@@ -32,11 +33,16 @@ const mutations = {
 
 const actions = {
   [actionTypes.getFeed](context, {apiUrl}) {
+    console.log('get feed action')
     return new Promise(resolve => {
       context.commit(mutationTypes.getFeedStart)
       feedApi
         .getFeed(apiUrl)
         .then(response => {
+          response.data.articles.map(article => {
+            article.createdAt = formatDate(article.createdAt)
+            article.updatedAt = formatDate(article.updatedAt)
+          })
           context.commit(mutationTypes.getFeedSuccess, response.data)
           resolve(response.data)
         })

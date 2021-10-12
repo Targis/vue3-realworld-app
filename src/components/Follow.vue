@@ -1,22 +1,22 @@
 <template>
   <button
+    v-if="username"
     @click="handleFollow"
-    class="btn btn-sm action-btn ng-binding btn-outline-secondary"
+    class="btn btn-sm action-btn btn-outline-secondary"
   >
     <i class="ion-plus-round"></i>
     &nbsp;
-    <template v-if="!isFollowingOptimistic">Follow</template>
-    <template v-if="isFollowingOptimistic">Unfollow</template>
+    {{ isFollowingOptimistic ? 'Unfollow' : 'Follow' }}
     {{ username }}
   </button>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import {actionTypes} from '@/store/modules/followUser'
+import {mapState, mapGetters} from 'vuex'
+import {actionTypes, mutationTypes} from '@/store/modules/follow'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 export default {
-  name: 'MvFollowUser',
+  name: 'MvFollow',
   props: {
     isFollowing: {
       type: Boolean,
@@ -27,12 +27,10 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      isFollowingOptimistic: this.isFollowing
-    }
-  },
   computed: {
+    ...mapState({
+      isFollowingOptimistic: state => state.follow.isFollowingOptimistic
+    }),
     ...mapGetters({
       isAnonymous: authGetterTypes.isAnonymous
     })
@@ -47,8 +45,11 @@ export default {
         username: this.username,
         isFollowing: this.isFollowingOptimistic
       })
-      this.isFollowingOptimistic = !this.isFollowingOptimistic
+      this.$store.commit(mutationTypes.toggleFollow, this.isFollowingOptimistic)
     }
+  },
+  mounted() {
+    this.$store.commit(mutationTypes.setFollow, this.isFollowing)
   }
 }
 </script>

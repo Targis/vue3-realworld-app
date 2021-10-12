@@ -3,60 +3,11 @@
     <div class="banner">
       <div class="container" v-if="article">
         <h1>{{ article.title }}</h1>
-        <div class="article-meta">
-          <router-link
-            :to="{name: 'userProfile', params: {slug: article.author.username}}"
-          >
-            <img
-              :src="article.author.image"
-              @error="
-                $event.target.src =
-                  'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-              "
-            />
-          </router-link>
-          <div class="info">
-            <router-link
-              :to="{
-                name: 'userProfile',
-                params: {slug: article.author.username}
-              }"
-            >
-              {{ article.author.username }}
-            </router-link>
-            <span class="date">{{ articleCreatedAt }}</span>
-          </div>
-          <span v-if="isAuthor">
-            <router-link
-              class="btn btn-outline-secondary btn-sm"
-              :to="{name: 'editArticle', params: {slug: article.slug}}"
-            >
-              <i class="ion-edit"></i>
-              Edit Article
-            </router-link>
-            &nbsp;
-            <button
-              class="btn btn-outline-danger btn-sm"
-              @click="deleteArticle"
-            >
-              <i class="ion-trash-a"></i>
-              Delete Article
-            </button>
-          </span>
-          <span v-if="!isAuthor">
-            <mv-follow-user
-              :is-following="article.author.following"
-              :username="article.author.username"
-            />
-            &nbsp;
-            <mv-add-to-favorites
-              :btn-style-big="true"
-              :is-favorited="article.favorited"
-              :article-slug="article.slug"
-              :favorites-count="article.favoritesCount"
-            />
-          </span>
-        </div>
+        <mv-article-meta
+          :article="article"
+          :is-author="isAuthor"
+          :is-following="article.author.following"
+        />
       </div>
     </div>
     <div class="container page">
@@ -71,6 +22,18 @@
         </div>
       </div>
       <hr />
+      <div class="article-actions" v-if="article">
+        <mv-article-meta
+          :article="article"
+          :isAuthor="isAuthor"
+          :is-following="article.author.following"
+        />
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-8 offset-md-2">
+          <mv-comments />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -82,17 +45,16 @@ import {mapState, mapGetters} from 'vuex'
 import MvLoading from '@/components/Loading'
 import MvErrorMessage from '@/components/ErrorMessage'
 import MvTagList from '@/components/TagList'
-import MvFollowUser from '@/components/FollowUser'
-import MvAddToFavorites from '@/components/AddToFavorites'
-import {formatDate} from '@/helpers/utils'
+import MvArticleMeta from '@/components/ArticleMeta'
+import MvComments from '@/components/Comments'
 export default {
   name: 'MvArticle',
   components: {
     MvLoading,
     MvErrorMessage,
     MvTagList,
-    MvFollowUser,
-    MvAddToFavorites
+    MvArticleMeta,
+    MvComments
   },
   computed: {
     ...mapState({
@@ -108,13 +70,9 @@ export default {
         return false
       }
       return this.currentUser.username === this.article.author.username
-    },
-    articleCreatedAt() {
-      return formatDate(this.article.createdAt)
     }
   },
   mounted() {
-    console.log(this.$route)
     this.$store.dispatch(articleActionTypes.getArticle, {
       slug: this.$route.params.slug
     })

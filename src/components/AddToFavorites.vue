@@ -1,5 +1,6 @@
 <template>
   <button
+    v-if="articleSlug"
     @click="handleLike"
     class="btn btn-sm"
     :class="{
@@ -9,13 +10,7 @@
   >
     <i class="ion-heart"></i>
     &nbsp;
-    <template v-if="btnStyleBig">
-      {{ isFavoritedOptimistic ? 'Unfollow Article' : 'Follow Article' }}
-      &nbsp; ({{ favoritesCountOptimistic }})
-    </template>
-    <template v-else>
-      {{ favoritesCountOptimistic }}
-    </template>
+    {{ favoritesCountOptimistic }}
   </button>
 </template>
 
@@ -37,10 +32,6 @@ export default {
     favoritesCount: {
       type: Number,
       required: true
-    },
-    btnStyleBig: {
-      type: Boolean,
-      required: false
     }
   },
   data() {
@@ -60,7 +51,6 @@ export default {
         this.$router.push({name: 'login'})
         return false
       }
-
       this.$store.dispatch(actionTypes.addToFavorites, {
         slug: this.articleSlug,
         isFavorited: this.isFavoritedOptimistic
