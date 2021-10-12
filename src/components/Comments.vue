@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p if="isAnonymous">
+    <p v-if="isAnonymous">
       <router-link :to="{name: 'login'}">Sign in</router-link>
-
       or
       <router-link :to="{name: 'register'}">Sign up</router-link>
       to add comments on this article.
     </p>
+    <mv-validation-errors v-if="errors" :validation-errors="errors" />
     <form
       @submit.prevent="postComment"
       class="card comment-form"
@@ -76,8 +76,12 @@ import {mapState, mapGetters} from 'vuex'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import {actionTypes} from '@/store/modules/comments'
 import {formatDate} from '@/helpers/utils'
+import MvValidationErrors from '@/components/ValidationErrors'
 export default {
   name: 'MvComments',
+  components: {
+    MvValidationErrors
+  },
   data() {
     return {
       commentText: ''
@@ -86,7 +90,7 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.comments.isLoading,
-      error: state => state.comments.error,
+      errors: state => state.comments.errors,
       comments: state => state.comments.data
     }),
     ...mapGetters({
@@ -98,6 +102,7 @@ export default {
     this.$store.dispatch(actionTypes.getComments, {
       slug: this.$route.params.slug
     })
+    this.validationErrors = null
   },
   methods: {
     postComment() {

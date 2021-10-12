@@ -3,7 +3,7 @@ import commentsApi from '@/api/comments'
 const state = {
   data: [],
   isLoading: false,
-  error: null
+  errors: null
 }
 
 export const mutationTypes = {
@@ -37,7 +37,7 @@ const mutations = {
   },
   [mutationTypes.getCommentsFailure](state, payload) {
     state.isLoading = false
-    state.error = payload
+    state.errors = payload
   },
 
   [mutationTypes.addCommentStart](state) {
@@ -49,7 +49,7 @@ const mutations = {
   },
   [mutationTypes.addCommentFailure](state, payload) {
     state.isLoading = false
-    state.error = payload
+    state.errors = payload
   },
 
   [mutationTypes.deleteCommentStart]() {},
@@ -85,8 +85,11 @@ const actions = {
           context.commit(mutationTypes.addCommentSuccess, data.comment)
           resolve(data.comment)
         })
-        .catch(errors => {
-          context.commit(mutationTypes.addCommentFailure, errors)
+        .catch(result => {
+          context.commit(
+            mutationTypes.addCommentFailure,
+            result.response.data.errors
+          )
         })
     })
   },

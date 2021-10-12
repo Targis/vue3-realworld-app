@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'MvLoading',
+  name: 'MvErrorMessage',
   props: {
     message: {
       type: String,
