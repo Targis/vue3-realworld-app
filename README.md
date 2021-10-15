@@ -23,6 +23,10 @@ npm serve
 ```
 yarn build
 ```
+or
+```
+npm build
+```
 
 ## To know
 
