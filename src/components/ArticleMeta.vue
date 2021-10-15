@@ -3,13 +3,7 @@
     <router-link
       :to="{name: 'userProfile', params: {slug: article.author.username}}"
     >
-      <img
-        :src="article.author.image"
-        @error="
-          $event.target.src =
-            'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-        "
-      />
+      <img :src="article.author.image" />
     </router-link>
     <div class="info">
       <router-link
@@ -82,7 +76,7 @@ export default {
     },
     isFollowing: {
       type: Boolean,
-      required: true
+      required: false
     }
   },
   computed: {

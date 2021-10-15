@@ -2,7 +2,7 @@
   <div>
     <mv-loading v-if="isLoading" />
     <mv-error-message v-if="error" />
-    <div class="sidebar" v-if="popularTags">
+    <div class="sidebar" v-if="popularTags && popularTags.lenght">
       <p>Popular tags</p>
       <div class="tag-list">
         <router-link

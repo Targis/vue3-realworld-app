@@ -5,6 +5,7 @@
     <mv-error-message v-if="error" />
 
     <div v-if="feed">
+      {{ feed.articles.length === 0 ? 'No articles are here... yet.' : '' }}
       <div
         class="article-preview"
         v-for="(article, index) in feed.articles"
@@ -14,14 +15,7 @@
           <router-link
             :to="{name: 'userProfile', params: {slug: article.author.username}}"
           >
-            <img
-              :src="article.author.image"
-              alt="avatar"
-              @error="
-                $event.target.src =
-                  'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-              "
-            />
+            <img :src="article.author.image" alt="avatar" />
           </router-link>
           <div class="info">
             <router-link

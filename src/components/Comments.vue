@@ -1,5 +1,6 @@
 <template>
   <div>
+    <mv-loading v-if="isLoading" />
     <p v-if="isAnonymous">
       <router-link :to="{name: 'login'}">Sign in</router-link>
       or
@@ -54,7 +55,7 @@
               {{ comment.author.username }}
             </router-link>
             <span class="date-posted">
-              {{ formatDate(comment.createdAt) }}
+              {{ format(comment.createdAt) }}
             </span>
             <span
               class="mod-options"
@@ -77,10 +78,12 @@ import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import {actionTypes} from '@/store/modules/comments'
 import {formatDate} from '@/helpers/utils'
 import MvValidationErrors from '@/components/ValidationErrors'
+import MvLoading from '@/components/Loading'
 export default {
   name: 'MvComments',
   components: {
-    MvValidationErrors
+    MvValidationErrors,
+    MvLoading
   },
   data() {
     return {
@@ -122,7 +125,7 @@ export default {
         id
       })
     },
-    formatDate(dateString) {
+    format(dateString) {
       return formatDate(dateString)
     }
   }
