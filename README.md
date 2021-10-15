@@ -1,13 +1,22 @@
 # medivue
+RealWorld Example App
 
 ## Project setup
 ```
 yarn install
 ```
+or 
+```
+npm i
+```
 
 ### Compiles and hot-reloads for development
 ```
 yarn serve
+```
+or
+```
+npm serve
 ```
 
 ### Compiles and minifies for production
@@ -15,10 +24,8 @@ yarn serve
 yarn build
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## To know
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vuex modules for store
+- Axios for ajax requests
+- 'mv' as prefix for components
